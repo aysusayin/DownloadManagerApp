@@ -1,0 +1,224 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is the backend server for Download Manager web application.",
+    "version": "1.0.0",
+    "title": "Download Manager",
+    "contact": {
+      "email": "aysusayin@gmail.com"
+    }
+  },
+  "host": "localhost:9000",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "software",
+      "description": "Available software"
+    },
+    {
+      "name": "release",
+      "description": "A release of a software"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/software": {
+      "get": {
+        "tags": [
+          "software"
+        ],
+        "summary": "Get all the available software",
+        "description": "",
+        "operationId": "getAllSoftware",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Software_Short"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/software/:id": {
+      "get": {
+        "tags": [
+          "release"
+        ],
+        "summary": "Get all the available releases of the selected software",
+        "description": "",
+        "operationId": "getAllSoftwareReleases",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "the software id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Software_Long"
+            }
+          }
+        }
+      }
+    },
+    "/software/:id/release/:id": {
+      "get": {
+        "tags": [
+          "release"
+        ],
+        "summary": "Get information about requested softwarerelease",
+        "description": "",
+        "operationId": "getRelease",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "software/:id",
+            "description": "the software id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "release/:id",
+            "description": "the release id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "object",
+              "$ref": "#/definitions/Release"
+            }
+          }
+        }
+      }
+    },
+    "/software/:id/:channel": {
+      "get": {
+        "tags": [
+          "release"
+        ],
+        "summary": "Get all available software releases in the requested channel",
+        "description": "",
+        "operationId": "getReleasesByChannel",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": ":id",
+            "description": "the software id",
+            "required": true,
+            "type": "integer"
+          },
+          {
+            "name": "channel",
+            "description": "the channel name",
+            "required": true,
+            "type": "string",
+            "example": "stable, beta, nighly"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Release"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Software_Short": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "example": "21"
+        },
+        "name": {
+          "type": "string",
+          "example": "The Greatest Application"
+        }
+      }
+    },
+    "Software_Long": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "name": {
+          "type": "string"
+        },
+        "releases": {
+          "type": "object",
+          "$ref": "#/definitions/Release"
+        }
+      }
+    },
+    "Release": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "software_id": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "date": {
+          "type": "string",
+          "description": "Date when this version is released"
+        },
+        "version": {
+          "type": "string",
+          "description": "Version name or version number"
+        },
+        "notes": {
+          "type": "string",
+          "description": "Release notes"
+        },
+        "channel": {
+          "type": "string",
+          "description": "Channel name:stable, beta or nightly"
+        },
+        "download": {
+          "type": "string",
+          "description": "Download file name"
+        }
+      }
+    }
+  }
+}
